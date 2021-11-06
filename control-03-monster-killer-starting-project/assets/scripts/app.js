@@ -12,10 +12,13 @@ const LOG_EVENT_GAME_OVER = "GAME_OVER";
 
 const enteredValue = prompt("Maximum life for you and the monster.", "100");
 
-let chosenMaxLife = +enteredValue;
-
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
+let chosenMaxLife;
+try{
+  getMaxLife();
+}catch(error){
+  console.log(error);
   chosenMaxLife = 100;
+  alert("You entered wrong number");
 }
 
 let currentMonsterHealth = chosenMaxLife;
@@ -45,6 +48,15 @@ function writeToLog(event, value, monsterHealt, playerHealth) {
 
   }
   battleLog.push(logEntry);
+}
+
+function getMaxLife(){
+  const parsedValue = parseInt(enteredValue);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw {message: "Wrong input"};
+  }else {
+    chosenMaxLife = enteredValue;
+  }
 }
 
 function reset() {
@@ -121,7 +133,12 @@ function healPlayerHandler() {
 }
 
 function printLogHandler() {
-    console.log(battleLog);
+    for(const logEntry of battleLog){
+      for(const key in logEntry){
+        console.log(key);
+        console.log(logEntry[key]);
+      }
+    }
 }
 
 attackBtn.addEventListener("click", attackHandler);
